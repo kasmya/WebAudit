@@ -501,12 +501,6 @@ git clone https://github.com/yourusername/webaudit.git
 
 ---
 
-## 📝 Resume Description
-
-> Developed a Chrome extension that performs real-time structural and security analysis of webpages using DOM inspection and client-side risk heuristics inspired by OWASP guidelines. Implemented scoring logic, JWT detection, API key pattern analysis, HTTPS verification, and theme switching using Manifest V3 architecture.
-
----
-
 ## 📄 License
 
 This project is licensed under the **MIT License**.
