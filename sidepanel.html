@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WebAudit - Security Analysis</title>
+  <style>
+    /* Professional Dark Theme - VSCode Inspired */
+    :root {
+      --bg-primary: #1e1e1e;
+      --bg-secondary: #252526;
+      --bg-tertiary: #2d2d30;
+      --bg-elevated: #333333;
+      --border: #3c3c3c;
+      --border-light: #454545;
+      --text-primary: #cccccc;
+      --text-secondary: #858585;
+      --text-muted: #6a6a6a;
+      --accent-cyan: #4ec9b0;
+      --accent-blue: #569cd6;
+      --accent-green: #6a9955;
+      --accent-yellow: #dcdcaa;
+      --accent-orange: #ce9178;
+      --accent-red: #f14c4c;
+      --accent-purple: #c586c0;
+      --score-high: #4ec9b0;
+      --score-mid: #dcdcaa;
+      --score-low: #f14c4c;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Consolas', 'Monaco', 'SF Mono', monospace;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      width: 380px;
+      min-height: 580px;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    /* Header */
+    .header {
+      background: var(--bg-secondary);
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--accent-cyan);
+    }
+
+    .logo-icon {
+      width: 20px;
+      height: 20px;
+      background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 4px;
+    }
+
+    .btn {
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      padding: 4px 8px;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 11px;
+      transition: all 0.15s;
+    }
+
+    .btn:hover {
+      background: var(--bg-elevated);
+      color: var(--text-primary);
+    }
+
+    .url-bar {
+      background: var(--bg-tertiary);
+      padding: 6px 10px;
+      border-radius: 4px;
+      font-size: 10px;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid var(--border);
+    }
+
+    .url-bar .protocol {
+      color: var(--accent-green);
+    }
+
+    .url-bar .insecure {
+      color: var(--accent-red);
+    }
+
+    /* Main Score Section */
+    .score-section {
+      padding: 16px;
+      background: var(--bg-secondary);
+    }
+
+    .score-main {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .score-ring {
+      width: 72px;
+      height: 72px;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .score-ring svg {
+      transform: rotate(-90deg);
+      width: 72px;
+      height: 72px;
+    }
+
+    .score-ring circle {
+      fill: none;
+      stroke-width: 6;
+      stroke-linecap: round;
+    }
+
+    .score-ring .bg {
+      stroke: var(--bg-tertiary);
+    }
+
+    .score-ring .progress {
+      stroke: var(--score-high);
+      stroke-dasharray: 188.5;
+      stroke-dashoffset: 188.5;
+      transition: stroke-dashoffset 0.8s ease;
+    }
+
+    .score-ring.mid .progress { stroke: var(--score-mid); }
+    .score-ring.low .progress { stroke: var(--score-low); }
+
+    .score-value {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .score-info {
+      flex: 1;
+    }
+
+    .score-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .score-category {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .score-category.high { color: var(--score-high); }
+    .score-category.mid { color: var(--score-mid); }
+    .score-category.low { color: var(--score-low); }
+
+    .score-bars {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .score-bar-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .score-bar-label {
+      width: 60px;
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    .score-bar-track {
+      flex: 1;
+      height: 4px;
+      background: var(--bg-tertiary);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .score-bar-fill {
+      height: 100%;
+      border-radius: 2px;
+      transition: width 0.5s ease;
+    }
+
+    .score-bar-fill.high { background: var(--score-high); }
+    .score-bar-fill.mid { background: var(--score-mid); }
+    .score-bar-fill.low { background: var(--score-low); }
+
+    .score-bar-value {
+      width: 24px;
+      font-size: 10px;
+      color: var(--text-secondary);
+      text-align: right;
+    }
+
+    /* Section */
+    .section {
+      padding: 12px 16px;
+      background: var(--bg-secondary);
+      border-top: 1px solid var(--border);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .section-title {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .section-badge {
+      background: var(--accent-red);
+      color: white;
+      padding: 1px 6px;
+      border-radius: 8px;
+      font-size: 9px;
+      font-weight: 600;
+    }
+
+    /* Issues */
+    .issues-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .issue {
+      background: var(--bg-tertiary);
+      border-radius: 4px;
+      padding: 10px;
+      border-left: 2px solid var(--border-light);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .issue:hover {
+      background: var(--bg-elevated);
+    }
+
+    .issue.high { border-left-color: var(--accent-red); }
+    .issue.medium { border-left-color: var(--accent-yellow); }
+    .issue.low { border-left-color: var(--accent-blue); }
+
+    .issue-top {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+
+    .issue-icon {
+      font-size: 12px;
+    }
+
+    .issue-title {
+      flex: 1;
+      font-size: 11px;
+      font-weight: 500;
+    }
+
+    .issue-severity {
+      font-size: 8px;
+      padding: 1px 5px;
+      border-radius: 3px;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .issue-severity.high { background: rgba(241, 76, 76, 0.2); color: var(--accent-red); }
+    .issue-severity.medium { background: rgba(220, 220, 170, 0.2); color: var(--accent-yellow); }
+    .issue-severity.low { background: rgba(86, 156, 214, 0.2); color: var(--accent-blue); }
+
+    .issue-desc {
+      font-size: 10px;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .issue-fix {
+      font-size: 9px;
+      color: var(--accent-green);
+      background: rgba(106, 153, 85, 0.1);
+      padding: 4px 6px;
+      border-radius: 2px;
+    }
+
+    /* Resources */
+    .resources-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+
+    .resource {
+      background: var(--bg-tertiary);
+      padding: 10px 8px;
+      border-radius: 4px;
+      text-align: center;
+    }
+
+    .resource-num {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--accent-blue);
+    }
+
+    .resource-label {
+      font-size: 9px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* Security Checks */
+    .checks-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px;
+    }
+
+    .check {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--bg-tertiary);
+      padding: 8px 10px;
+      border-radius: 4px;
+    }
+
+    .check-name {
+      font-size: 10px;
+      color: var(--text-secondary);
+    }
+
+    .check-status {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      font-weight: 700;
+    }
+
+    .check-status.pass { background: rgba(106, 153, 85, 0.2); color: var(--accent-green); }
+    .check-status.fail { background: rgba(241, 76, 76, 0.2); color: var(--accent-red); }
+    .check-status.warn { background: rgba(220, 220, 170, 0.2); color: var(--accent-yellow); }
+
+    /* Footer */
+    .footer {
+      padding: 10px 16px;
+      background: var(--bg-secondary);
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 9px;
+      color: var(--text-muted);
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg-primary); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+    /* Empty state */
+    .empty {
+      text-align: center;
+      padding: 20px;
+      color: var(--accent-green);
+    }
+
+    .empty-icon {
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="header-top">
+      <div class="logo">
+        <div class="logo-icon">🔍</div>
+        <span>WebAudit</span>
+      </div>
+      <div class="actions">
+        <button class="btn" id="exportBtn" title="Export JSON">Export</button>
+        <button class="btn" id="refreshBtn" title="Re-scan">↻</button>
+      </div>
+    </div>
+    <div class="url-bar">
+      <span id="protocolDisplay" class="protocol">https://</span>
+      <span id="urlDisplay">loading...</span>
+    </div>
+  </div>
+
+  <div class="score-section">
+    <div class="score-main">
+      <div class="score-ring" id="scoreRing">
+        <svg>
+          <circle class="bg" cx="36" cy="36" r="30"></circle>
+          <circle class="progress" id="scoreProgress" cx="36" cy="36" r="30"></circle>
+        </svg>
+        <div class="score-value" id="overallScore">--</div>
+      </div>
+      <div class="score-info">
+        <div class="score-label">SECURITY SCORE</div>
+        <div class="score-category" id="scoreCategory">Analyzing...</div>
+        <div class="score-bars">
+          <div class="score-bar-item">
+            <span class="score-bar-label">Security</span>
+            <div class="score-bar-track">
+              <div class="score-bar-fill" id="securityBar" style="width: 0%"></div>
+            </div>
+            <span class="score-bar-value" id="securityNum">--</span>
+          </div>
+          <div class="score-bar-item">
+            <span class="score-bar-label">Structure</span>
+            <div class="score-bar-track">
+              <div class="score-bar-fill" id="structureBar" style="width: 0%"></div>
+            </div>
+            <span class="score-bar-value" id="structureNum">--</span>
+          </div>
+          <div class="score-bar-item">
+            <span class="score-bar-label">Code</span>
+            <div class="score-bar-track">
+              <div class="score-bar-fill" id="developerBar" style="width: 0%"></div>
+            </div>
+            <span class="score-bar-value" id="developerNum">--</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <span class="section-title">Priority Findings</span>
+      <span class="section-badge" id="issueCount">0</span>
+    </div>
+    <div class="issues-list" id="issuesList">
+      <div class="empty">
+        <div class="empty-icon">⟳</div>
+        <div>Analyzing page...</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <span class="section-title">Resources</span>
+    </div>
+    <div class="resources-grid">
+      <div class="resource">
+        <div class="resource-num" id="imageCount">--</div>
+        <div class="resource-label">Images</div>
+      </div>
+      <div class="resource">
+        <div class="resource-num" id="scriptCount">--</div>
+        <div class="resource-label">Scripts</div>
+      </div>
+      <div class="resource">
+        <div class="resource-num" id="cssCount">--</div>
+        <div class="resource-label">Styles</div>
+      </div>
+      <div class="resource">
+        <div class="resource-num" id="thirdPartyCount">--</div>
+        <div class="resource-label">3rd Party</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header">
+      <span class="section-title">Security Headers</span>
+    </div>
+    <div class="checks-grid">
+      <div class="check">
+        <span class="check-name">HTTPS</span>
+        <span class="check-status" id="checkHttps">?</span>
+      </div>
+      <div class="check">
+        <span class="check-name">CSP</span>
+        <span class="check-status" id="checkCSP">?</span>
+      </div>
+      <div class="check">
+        <span class="check-name">SRI</span>
+        <span class="check-status" id="checkSRI">?</span>
+      </div>
+      <div class="check">
+        <span class="check-name">X-Frame</span>
+        <span class="check-status" id="checkXFrame">?</span>
+      </div>
+      <div class="check">
+        <span class="check-name">X-Content</span>
+        <span class="check-status" id="checkXContent">?</span>
+      </div>
+      <div class="check">
+        <span class="check-name">Referrer</span>
+        <span class="check-status" id="checkReferrer">?</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <span>WebAudit</span>
+    <span id="scanTime">--</span>
+  </div>
+
+  <script src="sidepanel.js"></script>
+</body>
+</html>
+

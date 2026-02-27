@@ -1,0 +1,29 @@
+i 
+{
+  "manifest_version": 3,
+  "name": "DevShield - Web Developer & Security Health Inspector",
+  "version": "1.0.0",
+  "description": "Real-time structural and security analysis of webpages with developer health scoring. Helps developers improve page quality and security.",
+  "permissions": [
+    "activeTab",
+    "scripting"
+  ],
+  "host_permissions": [
+    "https://*/*",
+    "http://*/*"
+  ],
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://*/*", "http://*/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}
+

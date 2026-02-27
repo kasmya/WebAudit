@@ -1,31 +1,26 @@
-# DevShield - Chrome Extension Development TODO
+# WebAudit UI Enhancement Plan
 
-## Phase 1: Project Setup
-- [x] Create project directory structure
-- [x] Create manifest.json (MV3)
-- [x] Create background.js
-- [x] Create content.js
-- [x] Create popup.html
-- [x] Create popup.js
+## Task: Make UI more VS Code-like with detailed explanations
 
-## Phase 2: Core Features Implementation
-- [x] Implement DOM Structure Analysis in content.js
-- [x] Implement Security Checks in content.js
-- [x] Implement Risk Scoring Logic
-- [x] Connect content.js to popup.js via background.js
+### Completed Changes:
 
-## Phase 3: UI/UX Development
-- [x] Design popup dashboard with dark mode
-- [x] Display page URL and HTTPS status
-- [x] Display risk labels and score breakdown
-- [x] List detected issues
+- [x] 1. Update popup.html with enhanced VS Code styling
+  - Use Consolas/Monaco as primary font
+  - Add VS Code activity bar sidebar styling
+  - Add VS Code status bar at bottom
+  - Replace graphs with detailed number cards
+  - Add click-to-expand explanations
+  - Add blue gradient backgrounds
+  
+- [x] 2. Update popup.js with better issue handling
+  - Add detailed text explanations to each issue
+  - Add click handlers for showing detailed explanations
+  - Make numbers more prominent in security section
 
-## Phase 4: Documentation
-- [x] Create README.md with installation guide
-- [x] Create feature explanation
-- [x] Test the extension
+- [x] 3. Remove emojis and use text labels instead
+  - [S] for Secure, [U] for Unsecure
+  - SAFE, WARNING, HIGH RISK for status
+  - [!] for warnings, [E] for errors
+  - Colored dots instead of emoji icons
 
-## Phase 5: Completion
-- [x] Final testing and verification
-- [x] Complete the project
-
+- [x] 4. Test the changes

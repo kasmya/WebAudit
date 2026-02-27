@@ -1,10 +1,11 @@
-# DevShield - Real-Time Web Developer & Security Health Inspector
+# WebAudit - Advanced Web Security & Code Inspector
 
 <p align="center">
   <img src="https://img.shields.io/badge/Chrome-Extension-green?style=for-the-badge&logo=google-chrome" alt="Chrome Extension">
   <img src="https://img.shields.io/badge/Manifest-V3-blue?style=for-the-badge" alt="Manifest V3">
   <img src="https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge" alt="License">
   <img src="https://img.shields.io/badge/OWASP-Inspired-orange?style=for-the-badge" alt="OWASP">
+  <img src="https://img.shields.io/badge/Edge-Ready-purple?style=for-the-badge" alt="Edge">
 </p>
 
 ## Table of Contents
@@ -28,19 +29,21 @@
 
 ## 🛡️ Overview
 
-DevShield is a lightweight Chrome extension that performs real-time structural and security analysis of any webpage, presenting a clear developer health score with risk indicators. It's designed to help:
+WebAudit is a lightweight Chrome/Edge extension that performs real-time structural, security, and developer analysis of any webpage, presenting clear scores with actionable insights. It's designed to help:
 
 - **Beginner web developers** learn best practices
 - **Cybersecurity students** understand common vulnerabilities
 - **Bug bounty hunters** quickly assess target pages
+- **QA engineers** perform quick audits
+- **Webmasters** check site health
 
-### Why DevShield?
+### Why WebAudit?
 
-In today's web development landscape, security and accessibility are often overlooked. DevShield provides instant feedback on:
+In today's web development landscape, security, accessibility, and performance are often overlooked. WebAudit provides instant feedback on:
 - HTML structure quality
-- Common security vulnerabilities
-- Accessibility best practices
-- Performance-impacting patterns
+- Security vulnerabilities (CSP, SRI, XSS, cookies)
+- Accessibility best practices (ARIA, labels)
+- Performance patterns (lazy loading, render blocking)
 
 ---
 
@@ -57,25 +60,41 @@ In today's web development landscape, security and accessibility are often overl
 | Image Alt Checker | Detects images missing `alt` attributes |
 | Meta Description | Checks for presence of meta description |
 | Viewport Tag | Checks for responsive design viewport tag |
+| Deprecated Tags | Detects obsolete HTML tags (center, font, etc.) |
 
 ### 🔐 Security Checks (OWASP-Inspired)
 
 | Check | Risk Level | Description |
 |-------|------------|-------------|
 | HTTPS Detection | 🔴 High | Verifies page uses secure protocol |
+| CSP Detection | 🔴 High | Checks for Content-Security-Policy |
+| SRI Check | 🟡 Medium | Verifies Subresource Integrity on scripts |
+| DOM XSS Sinks | 🔴 High | Detects eval(), document.write, innerHTML |
+| Cookie Security | 🟡 Medium | Checks for Secure, HttpOnly, SameSite |
+| X-Frame-Options | 🟡 Medium | Clickjacking protection check |
+| Referrer Policy | 🟢 Low | Controls information leakage |
 | Inline Script Detection | 🟡 Medium | Finds inline `<script>` tags (XSS risk) |
-| JWT localStorage | 🔴 High | Detects JWT tokens in localStorage |
-| API Key Patterns | 🔴 High | Regex patterns for exposed API keys |
-| Excessive Scripts | 🟡 Medium | Warns if >10 external scripts |
-| Exposed Tokens | 🔴 High | Finds tokens in HTML attributes |
+| Form CSRF Protection | 🔴 High | Checks for CSRF tokens in forms |
+| Mixed Content | 🔴 High | Detects HTTP resources on HTTPS pages |
+
+### 👨‍💻 Developer Metrics
+
+| Check | Description |
+|-------|-------------|
+| Resource Counting | Images, CSS, JS, fonts, video, audio |
+| Render Blocking | Detects blocking CSS/JS in head |
+| Lazy Loading | Checks for loading="lazy" on images |
+| Accessibility | ARIA labels, input labels, semantic roles |
+| Deprecated Tags | Detects obsolete HTML elements |
 
 ### 📊 Risk Scoring System
 
-The extension calculates three scores:
+The extension calculates four scores:
 
 1. **Structure Score (0-100)** - Based on HTML best practices
 2. **Security Score (0-100)** - Based on security vulnerabilities
-3. **Overall Health (0-100)** - Average of structure and security
+3. **Developer Score (0-100)** - Based on best practices
+4. **Weighted Overall (0-100)** - Security-weighted average (50% security, 25% structure, 25% developer)
 
 #### Risk Categories:
 
@@ -107,8 +126,8 @@ The extension calculates three scores:
 
 1. **Download or Clone the Repository**
    ```bash
-   git clone https://github.com/yourusername/devshield.git
-   cd devshield
+   git clone https://github.com/yourusername/webaudit.git
+   cd webaudit
    ```
 
 2. **Open Chrome Extensions**
@@ -120,15 +139,15 @@ The extension calculates three scores:
 
 4. **Load the Extension**
    - Click the **"Load unpacked"** button
-   - Select the `DevShield` folder from your files
+   - Select the `WebAudit` folder from your files
 
 5. **Pin to Browser**
    - Click the puzzle piece icon (🧩) in Chrome toolbar
-   - Click the pin icon next to DevShield
+   - Click the pin icon next to WebAudit
 
 ### Verify Installation
 
-- The DevShield icon 🛡️ should appear in your toolbar
+- The WebAudit icon 🔍 should appear in your toolbar
 - Click it to see the popup interface
 
 ---
@@ -138,11 +157,11 @@ The extension calculates three scores:
 ### Basic Usage
 
 1. Navigate to any webpage you want to analyze
-2. Click the DevShield extension icon in your browser toolbar
+2. Click the WebAudit extension icon in your browser toolbar
 3. The extension automatically scans the page
 4. View the results:
-   - Overall health score
-   - Structure and security breakdowns
+   - Overall health score (weighted)
+   - Structure, Security, and Developer breakdowns
    - List of detected issues
 
 ### Understanding Results
@@ -153,7 +172,8 @@ The extension calculates three scores:
 
 #### Score Breakdown
 - **Structure**: HTML quality score
-- **Security**: Security vulnerability score
+- **Security**: Security vulnerability score (weighted 50%)
+- **Developer**: Best practices score
 
 #### Issues List
 - Each issue shows:
@@ -370,7 +390,7 @@ Overall = round((Structure Score + Security Score) / 2)
 
 1. Load extension in Chrome
 2. Open test page in browser
-3. Click DevShield icon
+3. Click WebAudit icon
 4. Verify scores match expected values
 
 ### Verification Checklist
@@ -388,7 +408,7 @@ Overall = round((Structure Score + Security Score) / 2)
 ## 📁 Project Structure
 
 ```
-DevShield/
+WebAudit/
 ├── manifest.json              # MV3 configuration
 ├── background.js             # Service worker
 ├── content.js                # DOM analyzer
@@ -396,8 +416,6 @@ DevShield/
 ├── popup.js                  # Popup logic
 ├── README.md                 # Documentation
 ├── TODO.md                   # Project tracking
-├── EVALUATION.md             # Test metrics
-├── UI_MOCKUP.md              # UI specification
 ├── test-page.html            # Test page (moderate)
 └── test-page-high-risk.html  # Test page (high risk)
 ```
@@ -463,14 +481,14 @@ DevShield/
 
 ```bash
 # Clone the repo
-git clone https://github.com/yourusername/devshield.git
+git clone https://github.com/yourusername/webaudit.git
 
 # Make changes
 # Edit files in your favorite editor
 
 # Test locally
 # 1. Go to chrome://extensions
-# 2. Click "Reload" on DevShield
+# 2. Click "Reload" on WebAudit
 # 3. Test your changes
 ```
 
@@ -507,15 +525,15 @@ See [LICENSE](LICENSE) for details.
 
 ## 🔗 Links
 
-- [Report Issues](https://github.com/yourusername/devshield/issues)
-- [Request Features](https://github.com/yourusername/devshield/issues)
-- [View Source](https://github.com/yourusername/devshield)
+- [Report Issues](https://github.com/yourusername/webaudit/issues)
+- [Request Features](https://github.com/yourusername/webaudit/issues)
+- [View Source](https://github.com/yourusername/webaudit)
 
 ---
 
 <p align="center">
   Made with ❤️ for developers and cybersecurity enthusiasts
   
-  🛡️ DevShield v1.0.0
+  🔍 WebAudit v2.0.0
 </p>
 

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e3a8a"/>
+      <stop offset="50%" style="stop-color:#1d4ed8"/>
+      <stop offset="100%" style="stop-color:#3b82f6"/>
+    </linearGradient>
+    <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6"/>
+      <stop offset="100%" style="stop-color:#1e40af"/>
+    </linearGradient>
+  </defs>
+  <circle cx="64" cy="64" r="60" fill="url(#bgGrad)"/>
+  <path d="M64 20 L100 35 L100 70 C100 90 80 105 64 115 C48 105 28 90 28 70 L28 35 Z" fill="url(#shieldGrad)" stroke="#ffffff" stroke-width="3"/>
+  <circle cx="64" cy="55" r="18" fill="none" stroke="#ffffff" stroke-width="4"/>
+  <line x1="54" y1="75" x2="74" y2="95" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="40" cy="45" r="4" fill="#10b981"/>
+  <circle cx="88" cy="45" r="4" fill="#10b981"/>
+</svg>
