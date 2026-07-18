@@ -1,7 +1,5 @@
 # Privacy Policy for WebAudit Extension
 
-**Effective Date:** [Insert Date]
-
 ## Overview
 WebAudit is a browser extension designed to perform security audits on web pages. This extension operates entirely client-side and does not collect, store, or transmit any personal data or user information.
 
@@ -18,7 +16,7 @@ WebAudit is a browser extension designed to perform security audits on web pages
 WebAudit does not integrate with any third-party services or APIs.
 
 ## Contact Information
-If you have any questions about this privacy policy, please contact us at [your contact information].
+If you have any questions about this privacy policy, please contact us at kasmyakyreen@gmail.com .
 
 ## Changes to This Policy
 We may update this privacy policy from time to time. Any changes will be reflected in the extension's documentation.
