@@ -1,10 +1,10 @@
-# DevShield UI Mockup Specification
+# WebAudit UI Mockup Specification
 
 ## Dark Mode Theme - GitHub-inspired Design
 
 ```
 ┌─────────────────────────────────────────────┐
-│  🛡️ DevShield                               │
+│  🛡️ WebAudit                               │
 │  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  │
 │  file:///Users/.../test-page.html           │
 │  ┌──────────┐                               │
@@ -66,7 +66,7 @@
 ## UI Components
 
 ### 1. Header Section
-- **Logo**: 🛡️ DevShield (blue accent)
+- **Logo**: 🛡️ (blue accent)
 - **URL Display**: Truncated URL in gray box
 - **HTTPS Badge**: 🔒 HTTPS (green) or 🔓 HTTP (red)
 - **Status Text**: "Ready to analyze" / "Analyzing..." / "Analysis complete"
@@ -91,9 +91,6 @@
   - 🟡 Yellow left border for structure issues
   - Icon + description for each issue
 
-### 4. Footer
-- Small text: "DevShield v1.0 • OWASP-Inspired Security Scanner"
-
 ## Design Principles
 - ✅ Minimalist dark mode
 - ✅ GitHub-inspired color scheme
@@ -101,4 +98,3 @@
 - ✅ Color-coded risk indicators
 - ✅ Compact but readable
 - ✅ No clutter - focus on data
-
