@@ -147,7 +147,6 @@
       isHttps: window.location.protocol === 'https:',
       formsWithPassword: 0,
       formsWithoutCSRF: 0,
-      openPorts: 0,
       localStorageUsed: false,
       sessionStorageUsed: false,
       thirdPartyDomains: [],
@@ -367,7 +366,6 @@
     const dev = {
       totalResources: 0,
       externalResources: 0,
-      estimatedTotalSize: 0,
       imagesCount: 0,
       cssCount: 0,
       jsCount: 0,
@@ -379,8 +377,6 @@
       webComponents: 0,
       ariaLabels: 0,
       accessibilityIssues: [],
-      consoleErrors: 0,
-      consoleWarnings: 0,
       // Performance hints
       renderBlockingCSS: 0,
       renderBlockingJS: 0,
