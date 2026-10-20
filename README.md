@@ -175,11 +175,11 @@ graph TD
 | File | Purpose |
 |------|---------|
 | `manifest.json` | Extension configuration, permissions, metadata |
-| `background.js` | Service worker, handles message passing |
-| `content.js` | Injected script, performs the DOM/security analysis |
-| `popup.html` / `popup.js` | Popup UI and logic (theme management, result display) |
-| `sidepanel.html` / `sidepanel.js` | Side panel UI, an alternative to the popup |
-| `convert-icons.js` | One-off dev script: renders `icon.svg` into the PNG sizes under `images/` |
+| `src/background.js` | Service worker, handles message passing |
+| `src/content.js` | Injected script, performs the DOM/security analysis |
+| `src/popup.html` / `src/popup.js` | Popup UI and logic (theme management, result display) |
+| `src/sidepanel.html` / `src/sidepanel.js` | Side panel UI, an alternative to the popup |
+| `scripts/convert-icons.js` | One-off dev script: renders `assets/icon.svg` into the PNG sizes under `assets/icons/` |
 
 ### Communication Flow
 
@@ -275,26 +275,30 @@ Searches HTML attributes for long opaque strings that look like access tokens, w
 
 ```
 WebAudit/
-├── manifest.json              # MV3 configuration
-├── background.js              # Service worker
-├── content.js                 # DOM/security analyzer
-├── popup.html / popup.js      # Popup UI + logic
-├── sidepanel.html / sidepanel.js  # Side panel UI + logic
-├── convert-icons.js           # Dev script: SVG -> PNG icons
-├── icon.svg                   # Source icon
-├── images/                    # Generated PNG icons (16/48/128)
-├── test-page.html             # Test page (moderate risk)
-├── test-page-high-risk.html   # Test page (high risk)
-├── PRIVACY_POLICY.md          # Privacy policy
-└── README.md                  # Documentation
+├── manifest.json                   # MV3 configuration
+├── src/
+│   ├── background.js                # Service worker
+│   ├── content.js                   # DOM/security analyzer
+│   ├── popup.html / popup.js        # Popup UI + logic
+│   └── sidepanel.html / sidepanel.js  # Side panel UI + logic
+├── assets/
+│   ├── icon.svg                      # Source icon
+│   └── icons/                        # Generated PNG icons (16/48/128)
+├── scripts/
+│   └── convert-icons.js              # Dev script: SVG -> PNG icons
+├── test-pages/
+│   ├── test-page.html                # Test page (moderate risk)
+│   └── test-page-high-risk.html      # Test page (high risk)
+├── PRIVACY_POLICY.md                # Privacy policy
+└── README.md                        # Documentation
 ```
 
 ### Test Pages
 
 | File | Purpose |
 |------|---------|
-| `test-page.html` | Page with a moderate number of issues |
-| `test-page-high-risk.html` | Page with multiple deliberate security issues |
+| `test-pages/test-page.html` | Page with a moderate number of issues |
+| `test-pages/test-page-high-risk.html` | Page with multiple deliberate security issues |
 
 Load either file in the browser and run WebAudit against it to sanity-check the scoring logic after making changes.
 
@@ -327,7 +331,7 @@ See [PRIVACY_POLICY.md](PRIVACY_POLICY.md) for the full policy.
 3. Make your changes and test locally:
    - Go to `chrome://extensions`
    - Click **Reload** on WebAudit
-   - Verify against `test-page.html` and `test-page-high-risk.html`
+   - Verify against `test-pages/test-page.html` and `test-pages/test-page-high-risk.html`
 4. Commit and push your branch.
 5. Open a Pull Request.
 

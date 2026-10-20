@@ -1,4 +1,9 @@
 {
+  "name": "webaudit",
+  "private": true,
+  "scripts": {
+    "icons": "node scripts/convert-icons.js"
+  },
   "dependencies": {
     "sharp": "^0.34.5"
   }
