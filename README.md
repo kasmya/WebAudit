@@ -158,15 +158,16 @@ Click the moon/sun icon in the header to toggle dark/light mode; the choice pers
 
 ### Manifest V3
 
-```
-                    manifest.json
-              (Extension Configuration)
-                       |
-        +--------------+--------------+
-        |              |              |
-   background.js   content.js   popup.html/js
-   (Service          (Injected    sidepanel.html/js
-    Worker)           Script)       (UI & Logic)
+```mermaid
+graph TD
+    M["manifest.json<br/>(Extension Configuration)"]
+    BG["background.js<br/>(Service Worker)"]
+    CS["content.js<br/>(Injected Script)"]
+    UI["popup.html/js<br/>sidepanel.html/js<br/>(UI &amp; Logic)"]
+
+    M --> BG
+    M --> CS
+    M --> UI
 ```
 
 ### File Descriptions
@@ -182,12 +183,22 @@ Click the moon/sun icon in the header to toggle dark/light mode; the choice pers
 
 ### Communication Flow
 
-```
-  Popup/Side Panel  --sendMessage-->  Background Worker
-                                             |
-                                       tabs.sendMessage
-                                             v
-                                         Content Script
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant P as Popup / Side Panel
+    participant BG as Background Worker
+    participant CS as Content Script
+    participant D as Page DOM
+
+    U->>P: Opens popup / side panel
+    P->>BG: sendMessage("analyze")
+    BG->>CS: tabs.sendMessage("analyze")
+    CS->>D: Inspect DOM, scripts, cookies, headers
+    D-->>CS: Page data
+    CS-->>BG: Analysis results
+    BG-->>P: Analysis results
+    P-->>U: Renders scores & issues
 ```
 
 1. The user opens the popup or side panel.
